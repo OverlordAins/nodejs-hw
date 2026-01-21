@@ -4,55 +4,44 @@ import pino from 'pino-http';
 import 'dotenv/config';
 import helmet from 'helmet';
 
+import { connectMongoDB } from './db/connectMongoDB.js';
+import { Note } from './models/note.js';
+import { logger } from './middleware/logger.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
+
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
+app.use(logger);
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
-app.use(
-  pino({
-    level: 'info',
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        colorize: true,
-        translateTime: 'HH:MM:ss',
-        ignore: 'pid,hostname',
-        messageFormat:
-          '{req.method} {req.url} {res.statusCode} - {responseTime}ms',
-        hideObject: true,
-      },
-    },
-  }),
-);
 
-app.get('/notes', (req, res) => {
-  res.status(200).json({ message: 'Retrieved all notes' });
+// Routes
+
+app.get('/notes', async (req, res) => {
+  const notes = await Note.find();
+  res.status(200).json({ notes });
 });
-app.get('/notes/:noteId', (req, res) => {
+app.get('/notes/:noteId', async (req, res) => {
   const { noteId } = req.params;
-  res.status(200).json({
-    message: `Retrieved note with ID: ${noteId}`,
-  });
+  const note = await Note.findById(noteId);
+  if (!note) {
+    return res.status(404).json({ message: 'Note not found' }); // 404 handler - Note not found
+  }
+  res.status(200).json({ note });
 });
 app.get('/test-error', () => {
   throw new Error('Simulated server error');
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
-// 500 handler
-app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(500).json({
-    message: 'Internal Server Error',
-    error: err.message,
-  });
-});
+// 404 handler - Route not found
+app.use(notFoundHandler);
+// 500 handler - Internal Server Error
+app.use(errorHandler);
 
+await connectMongoDB();
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
