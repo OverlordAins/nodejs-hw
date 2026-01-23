@@ -18,9 +18,9 @@ export const getNoteById = async (req, res, next) => {
   res.status(200).json({ note });
 };
 
-export const causeTestError = async () => {
-  throw new Error('Simulated server error');
-};
+// export const causeTestError = async () => {
+//   throw new Error('Simulated server error');
+// };
 
 export const createNote = async (req, res) => {
   const note = await Note.create(req.body);
@@ -34,7 +34,7 @@ export const deleteNote = async (req, res, next) => {
     next(createHttpError(404, 'Note not found'));
     return;
   }
-  res.status(200).json(note);
+  res.status(200).json({ note });
 };
 
 export const updateNote = async (req, res, next) => {
