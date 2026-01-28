@@ -1,0 +1,32 @@
+import { Joi, Segments } from 'celebrate';
+import { isValidObjectId } from 'mongoose';
+import { TAGS } from '../constants/tags';
+
+const objectIdValidator = (value, helpers) => {
+  if (!isValidObjectId(value)) {
+    return helpers.message('"{{#label}}" must be a valid MongoDB ObjectId');
+  }
+  return value;
+};
+
+export const noteIdParamSchema = {
+  [Segments.PARAMS]: Joi.object({
+    noteId: Joi.string().custom(objectIdValidator).required(),
+  }),
+};
+
+export const createNoteSchema = {
+  [Segments.BODY]: Joi.object({
+    title: Joi.string().required().min(1),
+    content: Joi.string().allow(''),
+    tag: Joi.string().valid(...TAGS),
+  }),
+};
+
+export const updateNoteSchema = {
+  [Segments.BODY]: Joi.object({
+    title: Joi.string().min(1),
+    content: Joi.string().allow(''),
+    tag: Joi.string().valid(...TAGS),
+  }),
+};

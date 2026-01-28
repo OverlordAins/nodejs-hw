@@ -8,6 +8,7 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
+import { errors } from 'celebrate';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -25,9 +26,8 @@ app.use(notesRoutes);
 //   throw new Error('Simulated server error');
 // });
 
-// 404 handler - Route not found
 app.use(notFoundHandler);
-// 500 handler - Internal Server Error
+app.use(errors());
 app.use(errorHandler);
 
 await connectMongoDB();
