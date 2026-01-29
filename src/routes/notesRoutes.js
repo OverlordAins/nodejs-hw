@@ -15,9 +15,9 @@ import { celebrate } from 'celebrate';
 
 const router = Router();
 
+// router.get('/test-error', causeTestError);
 router.get('/notes', getAllNotes);
 router.get('/notes/:noteId', celebrate(noteIdParamSchema), getNoteById);
-// router.get('/test-error', causeTestError);
 router.post('/notes', celebrate(createNoteSchema), createNote);
 router.delete('/notes/:noteId', celebrate(noteIdParamSchema), deleteNote);
 router.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);

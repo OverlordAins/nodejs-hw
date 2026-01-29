@@ -24,6 +24,7 @@ export const createNoteSchema = {
 };
 
 export const updateNoteSchema = {
+  // ...noteIdParamSchema,
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
