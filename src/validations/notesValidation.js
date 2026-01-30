@@ -1,6 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
-import { TAGS } from '../constants/tags';
+import { TAGS } from '../constants/tags.js';
 
 const objectIdValidator = (value, helpers) => {
   if (!isValidObjectId(value)) {
@@ -9,6 +9,18 @@ const objectIdValidator = (value, helpers) => {
   return value;
 };
 
+export const getAllNotesSchema = {
+  [Segments.QUERY]: Joi.object({
+    page: Joi.number().integer().min(1),
+    perPage: Joi.number().integer().min(5).max(20),
+    tag: Joi.string().valid(...TAGS),
+    title: Joi.string().min(1),
+    content: Joi.string().allow(''),
+    search: Joi.string().allow('').trim(),
+  }),
+};
+
+// for getNoteById and deleteNote
 export const noteIdParamSchema = {
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom(objectIdValidator).required(),
