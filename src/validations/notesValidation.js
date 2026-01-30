@@ -1,6 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
-import { TAGS } from '../constants/tags';
+import { TAGS } from '../constants/tags.js';
 
 const objectIdValidator = (value, helpers) => {
   if (!isValidObjectId(value)) {
@@ -16,7 +16,7 @@ export const getAllNotesSchema = {
     tag: Joi.string().valid(...TAGS),
     title: Joi.string().min(1),
     content: Joi.string().allow(''),
-    search: Joi.string().allow(''),
+    search: Joi.string().allow('').trim(),
   }),
 };
 
