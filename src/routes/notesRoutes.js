@@ -18,12 +18,20 @@ const router = Router();
 
 // router.get('/test-error', causeTestError);
 router.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
-router.get('/notes/:noteId', celebrate(noteIdParamSchema), getNoteById);
+router.get(
+  '/notes/:noteId',
+  celebrate({ params: noteIdParamSchema }),
+  getNoteById,
+);
 router.post('/notes', celebrate(createNoteSchema), createNote);
-router.delete('/notes/:noteId', celebrate(noteIdParamSchema), deleteNote);
+router.delete(
+  '/notes/:noteId',
+  celebrate({ params: noteIdParamSchema }),
+  deleteNote,
+);
 router.patch(
   '/notes/:noteId',
-  celebrate(updateNoteSchema, noteIdParamSchema),
+  celebrate({ body: updateNoteSchema, params: noteIdParamSchema }),
   updateNote,
 );
 
