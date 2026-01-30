@@ -21,7 +21,7 @@ export const getAllNotesSchema = {
 };
 
 // for getNoteById and deleteNote
-export const noteIdParamSchema = {
+export const noteIdSchema = {
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
@@ -39,7 +39,7 @@ export const updateNoteSchema = {
   // [Segments.PARAMS]: Joi.object({
   //   noteId: Joi.string().custom(objectIdValidator).required(),
   // }),
-  // ...noteIdParamSchema,
+  // ...noteIdSchema,
   [Segments.BODY]: Joi.object({
     title: Joi.string().min(1),
     content: Joi.string().allow(''),
