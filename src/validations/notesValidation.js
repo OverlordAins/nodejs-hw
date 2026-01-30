@@ -36,9 +36,10 @@ export const createNoteSchema = {
 };
 
 export const updateNoteSchema = {
-  [Segments.PARAMS]: Joi.object({
-    noteId: Joi.string().custom(objectIdValidator).required(),
-  }), // ...noteIdParamSchema,
+  // [Segments.PARAMS]: Joi.object({
+  //   noteId: Joi.string().custom(objectIdValidator).required(),
+  // }),
+  // ...noteIdParamSchema,
   [Segments.BODY]: Joi.object({
     title: Joi.string().min(1),
     content: Joi.string().allow(''),
