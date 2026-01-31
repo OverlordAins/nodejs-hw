@@ -4,7 +4,7 @@ import createHttpError from 'http-errors';
 // Controller functions for managing notes
 
 export const getAllNotes = async (req, res) => {
-  const { page = 1, perPage = 10, tag, title, content, search } = req.query;
+  const { page = 1, perPage = 10, tag, search } = req.query;
   const skip = (page - 1) * perPage;
 
   // const notes = await Note.find().skip(skip).limit(perPage);
@@ -20,12 +20,6 @@ export const getAllNotes = async (req, res) => {
   if (tag) {
     notesQuery.where('tag').equals(tag);
   }
-  if (title) {
-    notesQuery.where('title').equals(title);
-  }
-  if (content) {
-    notesQuery.where('content').equals(content);
-  }
 
   const { totalNotes, notes } = await Promise.all([
     notesQuery.clone().countDocuments(),
@@ -34,7 +28,7 @@ export const getAllNotes = async (req, res) => {
   const totalPages = Math.ceil(totalNotes / perPage);
   res
     .status(200)
-    .json({ page, perPage, totalNotes, totalPages, notes: { notes } });
+    .json({ page, perPage, totalNotes, totalPages, notes: [notes] });
 };
 
 export const getNoteById = async (req, res, next) => {
