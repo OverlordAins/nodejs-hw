@@ -14,10 +14,14 @@ import {
 } from '../validations/notesValidation.js';
 import { celebrate } from 'celebrate';
 import { Segments } from 'celebrate';
+import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
 
 // router.get('/test-error', causeTestError);
+
+router.use('/notes', authenticate);
+
 router.get('/notes', celebrate({ query: getAllNotesSchema }), getAllNotes);
 router.get('/notes/:noteId', celebrate({ params: noteIdSchema }), getNoteById);
 router.post('/notes', celebrate({ body: createNoteSchema }), createNote);
