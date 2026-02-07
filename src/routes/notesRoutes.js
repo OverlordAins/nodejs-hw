@@ -13,7 +13,7 @@ import {
   getAllNotesSchema,
 } from '../validations/notesValidation.js';
 import { celebrate } from 'celebrate';
-import { Segments } from 'celebrate';
+// import { Segments } from 'celebrate';
 import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
@@ -30,13 +30,6 @@ router.delete(
   celebrate({ params: noteIdSchema }),
   deleteNote,
 );
-router.patch(
-  '/notes/:noteId',
-  celebrate({
-    body: updateNoteSchema[Segments.BODY],
-    params: updateNoteSchema[Segments.PARAMS],
-  }),
-  updateNote,
-);
+router.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
 
 export default router;
