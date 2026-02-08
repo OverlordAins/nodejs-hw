@@ -8,6 +8,7 @@ export const authenticate = async (req, res, next) => {
   }
 
   const session = await Session.findOne({
+    _id: req.cookies.sessionId,
     accessToken: req.cookies.accessToken,
   });
 
