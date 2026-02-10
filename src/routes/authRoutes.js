@@ -29,12 +29,12 @@ router.post('/auth/refresh', refreshUserSession);
 
 router.post(
   '/auth/request-reset-email',
-  celebrate(requestResetEmailSchema),
+  celebrate({ body: requestResetEmailSchema }),
   requestResetEmail,
 );
 router.post(
   '/auth/reset-password',
-  celebrate(resetPasswordSchema),
+  celebrate({ body: resetPasswordSchema }),
   resetPassword,
 );
 
